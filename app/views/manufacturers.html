@@ -1,0 +1,32 @@
+<h3>车辆厂商
+   <a ui-sref="app.manufacturers-add()" class="pull-right btn btn-sm btn-info">
+      <span class="btn-label"><i class="icon-plus"></i>
+      </span>新增</a>
+   <!-- START SEARCH INPUT-->
+   <from class="pull-right col-sm-3">
+      <div class="input-group">
+         <span class="input-group-addon">
+            <div class="icon-magnifier"></div>
+         </span>
+         <input type="text" placeholder="输入厂商名称" ng-model="filter.text" ui-keypress="{13:'tableParams.reload()'}" class="form-control" />
+      </div>
+   </from>
+   <!-- END SEARCH INPUT-->
+</h3>
+<div class="container-fluid">
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="entity in $data">
+                  <td data-title="'制造商名称'">{{entity.name}}</td>
+                  <td data-title="'联系电话'">{{entity.phone}}</td>
+                  <td data-title="'电子邮件'">{{entity.email}}</td>
+                  <td data-title="'联系地址'">{{entity.address}}</td>
+                  <td data-title="'登记日期'">{{entity.created}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>

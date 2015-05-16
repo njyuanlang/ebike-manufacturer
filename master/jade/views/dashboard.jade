@@ -1,0 +1,65 @@
+h3 
+  | {{'dashboard.Dashboard' | translate }}
+  small {{ 'dashboard.WELCOME' | translate:{ appName: app.name } }}  !
+
+// START widgets box
+.row
+  .col-lg-3.col-sm-6
+    // START widget
+    .panel.widget.bg-primary
+      .row.row-table
+        .col-xs-4.text-center.bg-primary-dark.pv-lg
+          em.icon-user-follow.fa-3x
+        .col-xs-8.pv-lg
+          .h2.mt0 {{statistic.user.added}}
+            small 人
+          .text-uppercase 新增用户
+    // END date widget
+  .col-lg-3.col-sm-6
+    // START widget
+    .panel.widget.bg-purple
+      .row.row-table
+        .col-xs-4.text-center.bg-purple-dark.pv-lg
+          em.icon-users.fa-3x
+        .col-xs-8.pv-lg
+          .h2.mt0 {{statistic.user.total}}
+            small 人
+          .text-uppercase 累计用户
+    // END date widget
+  .col-lg-3.col-md-6.col-sm-12
+    // START widget
+    .panel.widget.bg-green
+      .row.row-table
+        .col-xs-4.text-center.bg-green-dark.pv-lg
+          em.fa.fa-bicycle.fa-3x
+        .col-xs-8.pv-lg
+          .h2.mt0 {{statistic.bike.added}}
+            small 辆
+          .text-uppercase 新增车辆
+    // END date widget
+  .col-lg-3.col-md-6.col-sm-12
+    // START widget
+    .panel.widget.bg-gray
+      .row.row-table
+        .col-xs-4.text-center.bg-gray-dark.pv-lg
+          em.fa.fa-bicycle.fa-3x
+        .col-xs-8.pv-lg
+          .h2.mt0 {{statistic.bike.total}}
+            small 辆
+          .text-uppercase 累计车辆
+    // END date widget
+// END widgets box
+
+
+// START chart
+.row
+  .col-lg-12
+    #panelChart2.panel.panel-default
+      .panel-heading
+        paneltool(tool-collapse, tool-dismiss)
+        .panel-title 趋势图
+      .panel-wrapper
+        .panel-body
+          flot(dataset='chartData', options='lineOptions', height="300px")
+// END chart
+

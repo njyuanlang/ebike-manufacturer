@@ -1,0 +1,22 @@
+h3
+  | 故障检测记录
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入电动车序列号", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
+  
+.container-fluid
+  
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr(ng-repeat='entity in $data')
+            td(data-title="'检测结果'") {{entity.state | testState}}
+            td(data-title="'车辆编号'") {{entity.bike.serialNumber}}
+            td(data-title="'品牌'") {{entity.bike.brand.name}}
+            td(data-title="'型号'") {{entity.bike.model}}
+            td(data-title="'故障项目'") {{entity.items | testCountError}}
+            td(data-title="'修复率'") {{entity.items | testRepairedPercent}}
+            td(data-title="'登记时间'") {{entity.created}}

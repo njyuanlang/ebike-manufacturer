@@ -1,0 +1,56 @@
+<h3>
+   故障统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
+   <div class="pull-right col-sm-9">
+      <div class="col-sm-4">
+         <select ng-model="brand" ng-options="b.name for b in brands" class="chosen-select form-control"></select>
+      </div>
+      <div class="col-sm-4">
+         <select ng-model="province" ng-options="p.name for p in provinces" class="chosen-select form-control"></select>
+      </div>
+      <div class="col-sm-4">
+         <select ng-model="type" class="chosen-select form-control">
+            <option value="all">全部故障</option>
+            <option value="brake">刹车</option>
+            <option value="motor">电机</option>
+            <option value="controller">控制器</option>
+            <option value="steering">转把</option>
+         </select>
+      </div>
+   </div>
+</h3>
+<div class="container-fluid">
+   <!-- START chart-->
+   <div class="row">
+      <div class="col-lg-12">
+         <div id="panelChart2" class="panel panel-default">
+            <div class="panel-heading">
+               <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
+               <div class="panel-title">故障统计</div>
+            </div>
+            <div class="panel-wrapper">
+               <div class="panel-body">
+                  <flot dataset="barStackedData" options="barStackedOptions" height="300px"></flot>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- END chart-->
+   <!-- START table-->
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="entity in $data">
+                  <td data-title="'时间'">{{entity._id}} 天</td>
+                  <td data-title="'刹车'">{{entity.brake}}</td>
+                  <td data-title="'电机'">{{entity.motor}}</td>
+                  <td data-title="'控制器'">{{entity.controller}}</td>
+                  <td data-title="'转把'">{{entity.steering}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <!-- END chart-->
+</div>

@@ -1,0 +1,93 @@
+<h3>
+   {{'dashboard.Dashboard' | translate }}
+   <small>{{ 'dashboard.WELCOME' | translate:{ appName: app.name } }} !</small>
+</h3>
+<!-- START widgets box-->
+<div class="row">
+   <div class="col-lg-3 col-sm-6">
+      <!-- START widget-->
+      <div class="panel widget bg-primary">
+         <div class="row row-table">
+            <div class="col-xs-4 text-center bg-primary-dark pv-lg">
+               <em class="icon-user-follow fa-3x"></em>
+            </div>
+            <div class="col-xs-8 pv-lg">
+               <div class="h2 mt0">{{statistic.user.added}}
+                  <small>人</small>
+               </div>
+               <div class="text-uppercase">新增用户</div>
+            </div>
+         </div>
+      </div>
+      <!-- END date widget-->
+   </div>
+   <div class="col-lg-3 col-sm-6">
+      <!-- START widget-->
+      <div class="panel widget bg-purple">
+         <div class="row row-table">
+            <div class="col-xs-4 text-center bg-purple-dark pv-lg">
+               <em class="icon-users fa-3x"></em>
+            </div>
+            <div class="col-xs-8 pv-lg">
+               <div class="h2 mt0">{{statistic.user.total}}
+                  <small>人</small>
+               </div>
+               <div class="text-uppercase">累计用户</div>
+            </div>
+         </div>
+      </div>
+      <!-- END date widget-->
+   </div>
+   <div class="col-lg-3 col-md-6 col-sm-12">
+      <!-- START widget-->
+      <div class="panel widget bg-green">
+         <div class="row row-table">
+            <div class="col-xs-4 text-center bg-green-dark pv-lg">
+               <em class="fa fa-bicycle fa-3x"></em>
+            </div>
+            <div class="col-xs-8 pv-lg">
+               <div class="h2 mt0">{{statistic.bike.added}}
+                  <small>辆</small>
+               </div>
+               <div class="text-uppercase">新增车辆</div>
+            </div>
+         </div>
+      </div>
+      <!-- END date widget-->
+   </div>
+   <div class="col-lg-3 col-md-6 col-sm-12">
+      <!-- START widget-->
+      <div class="panel widget bg-gray">
+         <div class="row row-table">
+            <div class="col-xs-4 text-center bg-gray-dark pv-lg">
+               <em class="fa fa-bicycle fa-3x"></em>
+            </div>
+            <div class="col-xs-8 pv-lg">
+               <div class="h2 mt0">{{statistic.bike.total}}
+                  <small>辆</small>
+               </div>
+               <div class="text-uppercase">累计车辆</div>
+            </div>
+         </div>
+      </div>
+      <!-- END date widget-->
+   </div>
+</div>
+<!-- END widgets box-->
+<!-- START chart-->
+<div class="row">
+   <div class="col-lg-12">
+      <div id="panelChart2" class="panel panel-default">
+         <div class="panel-heading">
+            <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
+            <div class="panel-title">趋势图</div>
+         </div>
+         <div class="panel-wrapper">
+            <div class="panel-body">
+               <flot dataset="chartData" options="lineOptions" height="300px"></flot>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- END chart-->

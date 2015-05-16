@@ -1,0 +1,26 @@
+h3
+  | 车辆厂商
+  a.pull-right.btn.btn-sm.btn-info(ui-sref="app.manufacturers-add()") 
+    span.btn-label
+      i.icon-plus
+    | 新增
+  // START SEARCH INPUT
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入厂商名称", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
+  // END SEARCH INPUT
+  
+.container-fluid
+  
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr(ng-repeat='entity in $data')
+            td(data-title="'制造商名称'") {{entity.name}}
+            td(data-title="'联系电话'") {{entity.phone}}
+            td(data-title="'电子邮件'") {{entity.email}}
+            td(data-title="'联系地址'") {{entity.address}}
+            td(data-title="'登记日期'") {{entity.created}}

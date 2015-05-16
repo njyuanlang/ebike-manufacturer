@@ -1,0 +1,22 @@
+h3
+  | 客户
+  a.pull-right.btn.btn-sm.btn-info(ng-mousedown='csv.generate()', ng-href='{{ csv.link() }}', download='test.csv') 导出用户
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入用户手机号码", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
+  
+.container-fluid
+  
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams', export-csv='csv')
+        tbody
+          tr(ng-repeat='user in $data')
+            td(data-title="'用户名'") {{user.username}}
+            td(data-title="'真名'") {{user.name}}
+            td(data-title="'联系电话'") {{user.phone}}
+            td(data-title="'省'") {{user.region.province}}
+            td(data-title="'城市'") {{user.region.city}}
+            td(data-title="'注册日期'") {{user.created}}

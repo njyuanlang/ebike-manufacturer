@@ -1,0 +1,85 @@
+[
+  {
+    "text": "Menu Heading",
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "text": "Dashboard",
+    "sref": "app.dashboard",
+    "icon": "icon-speedometer",
+    "translate": "sidebar.nav.DASHBOARD"
+  },
+  {
+    "text": "Clients",
+    "sref": "app.clients",
+    "icon": "icon-users",
+    "translate": "sidebar.nav.CLIENT"
+  },
+  {
+    "text": "Bikes",
+    "sref": "app.bikes",
+    "icon": "fa fa-bicycle",
+    "translate": "sidebar.nav.BIKE"
+  },
+  {
+    "text": "Cruises",
+    "sref": "app.cruises",
+    "icon": "icon-map",
+    "translate": "sidebar.nav.CRUISE"
+  },
+  {
+    "text": "Tests",
+    "sref": "app.tests",
+    "icon": "icon-magnifier-add",
+    "translate": "sidebar.nav.TEST"
+  },
+  {
+    "text": "MBM",
+    "sref": "#",
+    "icon": "icon-tag",
+    "submenu": [
+      { "text": "Manufacturers", 
+        "sref": "app.manufacturers", 
+        "translate": "sidebar.nav.mbm.MANUFACTURER" 
+      },
+      { "text": "Brands", 
+        "sref": "app.brands", 
+        "translate": "sidebar.nav.mbm.BRAND" 
+      }    
+    ],
+    "translate": "sidebar.nav.mbm.MBM"
+  },
+  {
+    "text": "Devices",
+    "sref": "app.devices",
+    "icon": "icon-link",
+    "translate": "sidebar.nav.DEVICE"
+  },
+  {
+    "text": "STATISTIC",
+    "sref": "#",
+    "icon": "icon-bar-chart",
+    "submenu": [
+      { "text": "Brand", 
+        "sref": "app.statistic-brand", 
+        "translate": "sidebar.nav.statistic.BRAND" 
+      },
+      { "text": "Region", 
+        "sref": "app.statistic-region", 
+        "translate": "sidebar.nav.statistic.REGION" 
+      },
+      { "text": "Fault", 
+        "sref": "app.statistic-fault", 
+        "translate": "sidebar.nav.statistic.FAULT" 
+      }
+    ],
+    "translate": "sidebar.nav.statistic.STATISTIC"
+  },
+  {
+    "text": "Accounts",
+    "sref": "app.accounts",
+    "icon": "icon-user-following",
+    "translate": "sidebar.nav.ACCOUNT"
+  }
+]
