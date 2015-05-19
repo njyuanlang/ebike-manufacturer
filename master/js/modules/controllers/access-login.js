@@ -6,7 +6,7 @@
 App.controller('LoginFormController', function($scope, $state, User) {
 
   // bind here all data from the form
-  $scope.account = {realm: 'administrator', rememberMe: true};
+  $scope.account = {realm: 'manufacturer', rememberMe: true};
   // place the message if something goes wrong
   $scope.authMsg = '';
 

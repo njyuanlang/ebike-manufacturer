@@ -350,7 +350,7 @@ App
 App.controller('LoginFormController', ["$scope", "$state", "User", function($scope, $state, User) {
 
   // bind here all data from the form
-  $scope.account = {realm: 'administrator', rememberMe: true};
+  $scope.account = {realm: 'manufacturer', rememberMe: true};
   // place the message if something goes wrong
   $scope.authMsg = '';
 
@@ -399,7 +399,7 @@ App.controller('AccountsController', ["$scope", "User", "ngTableParams", functio
       var opt = {order: 'created DESC'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
-      opt.where = {realm: "administrator"}
+      opt.where = {realm: "manufacturer"}
       if($scope.filter.text != '') {
         opt.where.name = {like: $scope.filter.text}
       }
@@ -413,7 +413,7 @@ App.controller('AccountsController', ["$scope", "User", "ngTableParams", functio
 
 App.controller('AccountsAddController', ["$scope", "User", "$state", "toaster", function ($scope, User, $state, toaster) {
 
-  $scope.entity = {realm:'administrator'}
+  $scope.entity = {realm:'manufacturer'}
   
   $scope.submitted = false;
   $scope.validateInput = function(name, type) {
@@ -443,7 +443,8 @@ App.controller('AccountsAddController', ["$scope", "User", "$state", "toaster", 
 
 App.controller('AccountController', ["$scope", "User", "$state", "toaster", function ($scope, User, $state, toaster) {
 
-  $scope.entity = User.findById({id: $state.params.accountId})
+  // $scope.entity = User.findById({id: $state.params.accountId})
+  $scope.entity = User.getCurrent()
   
   $scope.submitted = false;
   $scope.validateInput = function(name, type) {
@@ -458,7 +459,7 @@ App.controller('AccountController', ["$scope", "User", "$state", "toaster", func
       User.upsert($scope.entity, function (entity) {
         toaster.pop('success', '更新成功', '已经更新帐号 '+entity.name)
         setTimeout(function () {
-          $state.go('app.accounts')
+          // $state.go('app.accounts')
         }, 2000)
       }, function (res) {
         toaster.pop('error', '更新错误', res.data.error.message)

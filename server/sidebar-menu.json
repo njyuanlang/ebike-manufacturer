@@ -78,7 +78,7 @@
   },
   {
     "text": "Accounts",
-    "sref": "app.accounts",
+    "sref": "app.account",
     "icon": "icon-user-following",
     "translate": "sidebar.nav.ACCOUNT"
   }
