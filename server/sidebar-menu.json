@@ -23,12 +23,6 @@
     "translate": "sidebar.nav.BIKE"
   },
   {
-    "text": "Cruises",
-    "sref": "app.cruises",
-    "icon": "icon-map",
-    "translate": "sidebar.nav.CRUISE"
-  },
-  {
     "text": "Tests",
     "sref": "app.tests",
     "icon": "icon-magnifier-add",
