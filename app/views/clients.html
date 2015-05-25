@@ -13,13 +13,13 @@
       <div class="table-responsive">
          <table ng-table="tableParams" export-csv="csv" class="table table-bordered table-striped">
             <tbody>
-               <tr ng-repeat="user in $data">
-                  <td data-title="'用户名'">{{user.username}}</td>
-                  <td data-title="'真名'">{{user.name}}</td>
-                  <td data-title="'联系电话'">{{user.phone}}</td>
-                  <td data-title="'省'">{{user.region.province}}</td>
-                  <td data-title="'城市'">{{user.region.city}}</td>
-                  <td data-title="'注册日期'">{{user.created}}</td>
+               <tr ng-repeat="entity in $data">
+                  <td data-title="'用户名'">{{entity.user.username}}</td>
+                  <td data-title="'真名'">{{entity.user.name}}</td>
+                  <td data-title="'联系电话'">{{entity.user.phone}}</td>
+                  <td data-title="'省'">{{entity.user.region.province}}</td>
+                  <td data-title="'城市'">{{entity.user.region.city}}</td>
+                  <td data-title="'注册日期'">{{entity.user.created}}</td>
                </tr>
             </tbody>
          </table>

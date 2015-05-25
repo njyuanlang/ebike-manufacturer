@@ -13,10 +13,10 @@ h3
     .table-responsive
       table.table.table-bordered.table-striped(ng-table='tableParams', export-csv='csv')
         tbody
-          tr(ng-repeat='user in $data')
-            td(data-title="'用户名'") {{user.username}}
-            td(data-title="'真名'") {{user.name}}
-            td(data-title="'联系电话'") {{user.phone}}
-            td(data-title="'省'") {{user.region.province}}
-            td(data-title="'城市'") {{user.region.city}}
-            td(data-title="'注册日期'") {{user.created}}
+          tr(ng-repeat='entity in $data')
+            td(data-title="'用户名'") {{entity.user.username}}
+            td(data-title="'真名'") {{entity.user.name}}
+            td(data-title="'联系电话'") {{entity.user.phone}}
+            td(data-title="'省'") {{entity.user.region.province}}
+            td(data-title="'城市'") {{entity.user.region.city}}
+            td(data-title="'注册日期'") {{entity.user.created}}
