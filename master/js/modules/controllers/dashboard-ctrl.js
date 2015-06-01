@@ -16,10 +16,10 @@ App.controller('DashboardController', function ($scope, User, Bike, ngTableParam
     var startOfDay = moment().startOf('day')
     var beginDate = moment().subtract(days, 'days').startOf('day')
 
-    User.count({where: {created: {gte: startOfDay}, realm: 'client' }}, function (result) {
+    Bike.countUserByManufacturer({filter:{where: {"owner.created": {gte: startOfDay}}, "owner.realm": 'client' }}, function (result) {
       $scope.statistic.user.added = result.count
     })
-    User.count({where: {realm: 'client' }}, function (result) {
+    Bike.countUserByManufacturer({filter:{where: {"owner.realm": 'client' }}}, function (result) {
       $scope.statistic.user.total = result.count
     })
     Bike.count({where: {created: {gte: startOfDay}}}, function (result) {
@@ -29,35 +29,35 @@ App.controller('DashboardController', function ($scope, User, Bike, ngTableParam
       $scope.statistic.bike.total = result.count
     })
     
-    var userData = null
+    // var userData = null
     var bikeData = null
-    User.stat({filter:{where:{created: {between: [beginDate, today]}, realm: 'client' }}}, function (results) {
-      userData = {
-        label: "新增用户",
-        color: "#768294",
-        data: []
-      }
-      for (var d = 1, i = 0; d <= days; d++) {
-        var day = moment(today).subtract(days-d, 'days')
-        var day2 = null
-        while(i < results.length) {
-          day2 = moment(results[i]._id.year+'-'+results[i]._id.month+'-'+results[i]._id.dayOfMonth, 'YYYY-MM-DD')
-          if(day.isBefore(day2, 'day')) {
-            day2 = null
-            break;
-          } else if(day.isSame(day2, 'day')) {
-            break
-          } else {
-            day2 = null
-            i++
-          }
-        }
-        userData.data.push([day.format('MM/DD'), day2? results[i].count:0])
-      }
-      if(userData && bikeData) {
-        $scope.chartData = [userData, bikeData]
-      }
-    })
+    // User.stat({filter:{where:{created: {between: [beginDate, today]}, realm: 'client' }}}, function (results) {
+    //   userData = {
+    //     label: "新增用户",
+    //     color: "#768294",
+    //     data: []
+    //   }
+    //   for (var d = 1, i = 0; d <= days; d++) {
+    //     var day = moment(today).subtract(days-d, 'days')
+    //     var day2 = null
+    //     while(i < results.length) {
+    //       day2 = moment(results[i]._id.year+'-'+results[i]._id.month+'-'+results[i]._id.dayOfMonth, 'YYYY-MM-DD')
+    //       if(day.isBefore(day2, 'day')) {
+    //         day2 = null
+    //         break;
+    //       } else if(day.isSame(day2, 'day')) {
+    //         break
+    //       } else {
+    //         day2 = null
+    //         i++
+    //       }
+    //     }
+    //     userData.data.push([day.format('MM/DD'), day2? results[i].count:0])
+    //   }
+    //   if(userData && bikeData) {
+    //     $scope.chartData = [userData, bikeData]
+    //   }
+    // })
     Bike.stat({filter:{where:{created: {between: [beginDate, today]}}}}, function (results) {
       bikeData = {
         label: "新增车辆",
@@ -81,9 +81,10 @@ App.controller('DashboardController', function ($scope, User, Bike, ngTableParam
         }
         bikeData.data.push([day.format('MM/DD'), day2? results[i].count:0])
       }
-      if(userData && bikeData) {
-        $scope.chartData = [userData, bikeData]
-      }
+      // if(userData && bikeData) {
+      //   $scope.chartData = [userData, bikeData]
+      // }
+      $scope.chartData = [bikeData]
     })
   }
   
