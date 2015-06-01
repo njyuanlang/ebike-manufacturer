@@ -27,10 +27,9 @@ h3 车辆品牌详情
               .form-group
                 label.col-sm-2.control-label 所属制造商
                 .col-sm-6
-                  select.form-control(name='manufacturer', ng-model="entity.manufacturerId")
-                    option(ng-repeat="m in manufacturers" value="{{m.id}}") {{m.name}}
+                  p.form-control-static {{entity.manufacturer.name}}
                 .col-sm-4
-                  small.text-muted 可选
+                  small.text-muted 不可修改
             .panel-title 下属型号
             .table-responsive
               table.table.table-bordered.table-striped(ng-table='tableParams')

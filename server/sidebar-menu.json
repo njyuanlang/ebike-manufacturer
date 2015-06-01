@@ -28,37 +28,16 @@
     "icon": "icon-magnifier-add",
     "translate": "sidebar.nav.TEST"
   },
-  {
-    "text": "MBM",
-    "sref": "#",
+  { "text": "Brands", 
+    "sref": "app.brands", 
     "icon": "icon-tag",
-    "submenu": [
-      { "text": "Manufacturers", 
-        "sref": "app.manufacturers", 
-        "translate": "sidebar.nav.mbm.MANUFACTURER" 
-      },
-      { "text": "Brands", 
-        "sref": "app.brands", 
-        "translate": "sidebar.nav.mbm.BRAND" 
-      }    
-    ],
-    "translate": "sidebar.nav.mbm.MBM"
-  },
-  {
-    "text": "Devices",
-    "sref": "app.devices",
-    "icon": "icon-link",
-    "translate": "sidebar.nav.DEVICE"
+    "translate": "sidebar.nav.mbm.BRAND" 
   },
   {
     "text": "STATISTIC",
     "sref": "#",
     "icon": "icon-bar-chart",
     "submenu": [
-      { "text": "Brand", 
-        "sref": "app.statistic-brand", 
-        "translate": "sidebar.nav.statistic.BRAND" 
-      },
       { "text": "Region", 
         "sref": "app.statistic-region", 
         "translate": "sidebar.nav.statistic.REGION" 

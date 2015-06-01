@@ -17,9 +17,10 @@ App.controller('TestsController', function ($scope, Test, ngTableParams) {
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Test.find({filter:opt}, $defer.resolve)
       Test.count({where: opt.where}, function (result) {
+        // console.log(result)
         $scope.tableParams.total(result.count)
+        Test.find({filter:opt}, $defer.resolve)
       })
     }
   })   

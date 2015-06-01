@@ -19,14 +19,6 @@ h3 新增车辆品牌
                   span.text-danger(ng-show="validateInput('name', 'required')") 品牌名称不能为空
                 .col-sm-4
                   small.text-muted 必填
-            fieldset
-              .form-group
-                label.col-sm-2.control-label 所属制造商
-                .col-sm-6
-                  select.form-control(name='manufacturer', ng-model="entity.manufacturerId")
-                    option(ng-repeat="m in manufacturers" value="{{m.id}}") {{m.name}}
-                .col-sm-4
-                  small.text-muted 可选
           .panel-footer.text-center
             button.mb-sm.btn.btn-lg.btn-info(type='submit') 提交   
             button.mb-sm.btn.btn-lg.btn-default(ui-sref="app.brands()") 取消

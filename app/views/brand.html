@@ -31,12 +31,10 @@
                      <div class="form-group">
                         <label class="col-sm-2 control-label">所属制造商</label>
                         <div class="col-sm-6">
-                           <select name="manufacturer" ng-model="entity.manufacturerId" class="form-control">
-                              <option ng-repeat="m in manufacturers" value="{{m.id}}">{{m.name}}</option>
-                           </select>
+                           <p class="form-control-static">{{entity.manufacturer.name}}</p>
                         </div>
                         <div class="col-sm-4">
-                           <small class="text-muted">可选</small>
+                           <small class="text-muted">不可修改</small>
                         </div>
                      </div>
                   </fieldset>

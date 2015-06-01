@@ -489,9 +489,9 @@ App.controller('BikesController', ["$scope", "Bike", "ngTableParams", function (
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Bike.find({filter:opt}, $defer.resolve)
       Bike.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Bike.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -515,9 +515,9 @@ App.controller('BrandsController', ["$scope", "Brand", "ngTableParams", function
       if($scope.filter.text != '') {
         opt.where = {"name": {like: $scope.filter.text}}
       }
-      Brand.find({filter:opt}, $defer.resolve)
       Brand.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Brand.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -555,8 +555,7 @@ App.controller('BrandsAddController', ["$scope", "Brand", "$state", "toaster", "
 
 App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manufacturer", "ngTableParams", function ($scope, Brand, $state, toaster, Manufacturer, ngTableParams) {
 
-  $scope.manufacturers = Manufacturer.query()
-  $scope.entity = Brand.findById({id:$state.params.brandId})
+  $scope.entity = Brand.findOne({filter:{where:{id:$state.params.brandId}, include:"manufacturer"}})
   $scope.model = ""
   
   $scope.submitted = false;
@@ -611,9 +610,9 @@ App.controller('ClientsController', ["$scope", "Bike", "ngTableParams", function
       if($scope.filter.text != '') {
         opt.where.username = {like: $scope.filter.text}
       }
-      Bike.findUsersByManufacturer({filter:opt}, $defer.resolve)
       Bike.countUserByManufacturer({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Bike.findUsersByManufacturer({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -1316,9 +1315,10 @@ App.controller('TestsController', ["$scope", "Test", "ngTableParams", function (
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Test.find({filter:opt}, $defer.resolve)
       Test.count({where: opt.where}, function (result) {
+        // console.log(result)
         $scope.tableParams.total(result.count)
+        Test.find({filter:opt}, $defer.resolve)
       })
     }
   })   

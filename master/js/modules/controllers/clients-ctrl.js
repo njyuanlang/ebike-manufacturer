@@ -18,9 +18,9 @@ App.controller('ClientsController', function ($scope, Bike, ngTableParams) {
       if($scope.filter.text != '') {
         opt.where.username = {like: $scope.filter.text}
       }
-      Bike.findUsersByManufacturer({filter:opt}, $defer.resolve)
       Bike.countUserByManufacturer({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Bike.findUsersByManufacturer({filter:opt}, $defer.resolve)
       })
     }
   })   
