@@ -29,7 +29,7 @@ var App = angular.module('angle', [
     'ui.utils'
   ]);
 
-App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', function ($rootScope, $state, $stateParams, $window, $templateCache) {
+App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', "User", "RemoteStorage", function ($rootScope, $state, $stateParams, $window, $templateCache, User, RemoteStorage) {
     // Set reference to access them from any scope
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
@@ -65,9 +65,18 @@ App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', f
     $rootScope.user = {
       name:     'John',
       job:      'ng-developer',
-      picture:  'app/img/user/02.jpg'
+      picture:  'app/img/dummy.png'
     };
-
+    if(User.isAuthenticated()) {
+      $rootScope.user = User.getCurrent();
+      $rootScope.user.$promise.then(function () {
+        $rootScope.user.picture = 'app/img/dummy.png';
+        RemoteStorage.getAvatar($rootScope.user.id).success(function (buffer) {
+          $rootScope.user.picture = buffer;
+        });
+      });
+    };
+    
 }]);
 
 /**=========================================================
@@ -103,6 +112,18 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         controller: 'DashboardController',
         templateUrl: helper.basepath('dashboard.html'),
         resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
+    })
+    .state('app.messages', {
+        url: '/messages',
+        title: 'Messages',
+        controller: 'MessagesController',
+        templateUrl: helper.basepath('messages.html')
+    })
+    .state('app.message-compose', {
+        url: '/messages/compose?touser',
+        title: 'Message Compose',
+        controller: 'MessageComposeController',
+        templateUrl: helper.basepath('message-compose.html')
     })
     .state('app.clients', {
         url: '/clients',
@@ -360,9 +381,11 @@ App.controller('LoginFormController', ["$scope", "$state", "User", function($sco
     if($scope.loginForm.$valid) {
 
       User.login($scope.account, function (user) {
+        $scope.user = user;
+        $scope.user.avatar = $scope.user.avatar || 'app/img/dummy.png';
         $state.go('app.dashboard');
       }, function (error) {
-        $scope.authMsg = error.data.error.message
+        $scope.authMsg = error.data.error.message;
       })
     }
     else {
@@ -980,6 +1003,90 @@ App.controller('ManufacturersAddController', ["$scope", "$state", "Manufacturer"
     }
   };
   
+}])
+/**=========================================================
+ * Module: messages-ctrl.js
+ * Messages Controller
+ =========================================================*/
+
+App.controller('MessagesController', ["$scope", "$rootScope", "$state", "Message", "ngTableParams", "RemoteStorage", function ($scope, $rootScope, $state, Message, ngTableParams, RemoteStorage) {
+  
+  $scope.filter = {text: ''}
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+    filter: $scope.filter.text
+  }, {
+    getData: function($defer, params) {
+      var opt = {include: ['FromUser']}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      opt.where = {ToUserName: $scope.user.id}
+      if($scope.filter.text != '') {
+        opt.where.Content = {regex: $scope.filter.text}
+      }
+      Message.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+        Message.find({filter:opt}, function (results) {
+          results.forEach(function (msg) {
+            msg.FromUser.avatar = 'app/img/dummy.png';
+            RemoteStorage.getAvatar(msg.FromUserName).success(function (buffer) {
+              msg.FromUser.avatar = buffer;
+            });
+          });
+          $defer.resolve(results);
+        })
+      })
+    }
+  });
+  
+  $scope.reply = function (user) {
+    $rootScope.messageDraft = {
+      touser: user
+    }
+    $state.go('app.message-compose');
+  }
+}])
+
+App.controller('MessageComposeController', ["$scope", "$state", "Message", "ngTableParams", "toaster", function ($scope, $state, Message, ngTableParams, toaster) {
+  
+  $scope.submitForm = function (isValid) {
+    
+    Message.create({
+      ToUserName: $scope.messageDraft.touser.id,
+      Content: $scope.content
+    }, function (result) {
+      console.log($scope.messageDraft);
+      toaster.pop('success', '发送成功', '已经向'+$scope.messageDraft.touser.name+"发送了消息！");
+      setTimeout(function () {
+        $state.go('app.messages');
+      }, 2000);
+      }, function (reaseon) {
+      toaster.pop('error', '发送错误', res.data.error.message);
+    })
+  }
+  
+  $scope.tableParams = new ngTableParams({
+    count: 10
+  }, {
+    counts: [],
+    getData: function($defer, params) {
+      var opt = {include: ['FromUser']}
+      opt.limit = 10
+      opt.skip = 0
+      opt.where = {
+        and: [{
+          or:[{ToUserName: $scope.messageDraft.touser.id},{FromUserName: $scope.messageDraft.touser.id}]
+        }]
+      };
+      Message.find({filter:opt}, function (results) {
+        results.forEach(function (msg) {
+          console.log($scope.user, msg);
+          msg.avatar = msg.FromUserName == $scope.user.id ? $scope.user.picture: $scope.messageDraft.touser.avatar;
+        });
+        $defer.resolve(results);
+      });
+    }
+  });
 }])
 /**=========================================================
  * Module: sidebar-menu.js
@@ -2049,7 +2156,20 @@ App.filter("percentage", ["$filter", function ($filter) {
   return function (input, decimals) {
     return $filter('number')(input * 100, decimals || 0) + '%';
   }
-}])
+}]);
+
+App.filter("moment", function () {
+  return function (input, format) {
+    return moment(input).format(format || 'YYYY-MM-DD HH:mm:ss');
+  }
+});
+
+App.filter("moment_unix", function () {
+  return function (input, format) {
+    return moment.unix(input).format(format || 'YYYY-MM-DD HH:mm:ss');
+  }
+});
+
 /**=========================================================
  * Module: login-filter.js
  * Login filter
