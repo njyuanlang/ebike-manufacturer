@@ -1433,7 +1433,7 @@ App.controller('TestsController', ["$scope", "Test", "ngTableParams", function (
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {
-        opt.where = {"serialNumber": {like: $scope.filter.text}}
+        opt.where = {"bike.serialNumber": {like: $scope.filter.text}}
       }
       Test.count({where: opt.where}, function (result) {
         // console.log(result)
