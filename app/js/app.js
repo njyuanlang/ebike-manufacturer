@@ -647,7 +647,7 @@ App.controller('ClientsController', ["$scope", "Bike", "ngTableParams", "LoopBac
       opt.skip = (params.page()-1)*opt.limit
       opt.where = {}
       if($scope.filter.text != '') {
-        opt.where.username = {like: $scope.filter.text}
+        opt.where['owner.username'] = {regex: $scope.filter.text}
       }
       Bike.countUserByManufacturer({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
