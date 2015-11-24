@@ -286,8 +286,11 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     $tooltipProvider.options({appendToBody: true});
 
 }])
-.config(["LoopBackResourceProvider", function(LoopBackResourceProvider) {
-    LoopBackResourceProvider.setAuthHeader('X-Access-Token');
+// .constant('urlBase', "http://0.0.0.0:3000/api")
+.constant('urlBase', "http://121.40.108.30:3000/api")
+.config(["LoopBackResourceProvider", "urlBase", function(LoopBackResourceProvider, urlBase) {
+    // LoopBackResourceProvider.setAuthHeader('X-Access-Token');
+    LoopBackResourceProvider.setUrlBase(urlBase);
 }])
 .config(["$httpProvider", function ($httpProvider) {
   $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
@@ -368,7 +371,7 @@ App
  * Demo for login api
  =========================================================*/
 
-App.controller('LoginFormController', ["$scope", "$state", "User", function($scope, $state, User) {
+App.controller('LoginFormController', ["$scope", "$state", "User", "$rootScope", function($scope, $state, User, $rootScope) {
 
   // bind here all data from the form
   $scope.account = {realm: 'manufacturer', rememberMe: true};
@@ -380,9 +383,9 @@ App.controller('LoginFormController', ["$scope", "$state", "User", function($sco
 
     if($scope.loginForm.$valid) {
 
-      User.login($scope.account, function (user) {
-        $scope.user = user;
-        $scope.user.avatar = $scope.user.avatar || 'app/img/dummy.png';
+      User.login($scope.account, function (accessToken) {
+        $rootScope.user = accessToken.user;
+        $rootScope.user.avatar = accessToken.user.avatar || 'app/img/dummy.png';
         $state.go('app.dashboard');
       }, function (error) {
         $scope.authMsg = error.data.error.message;
@@ -631,7 +634,7 @@ App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manu
  * Clients Controller
  =========================================================*/
 
-App.controller('ClientsController', ["$scope", "Bike", "ngTableParams", function ($scope, Bike, ngTableParams) {
+App.controller('ClientsController', ["$scope", "Bike", "ngTableParams", "LoopBackAuth", "$http", "$document", "$timeout", "urlBase", function ($scope, Bike, ngTableParams, LoopBackAuth, $http, $document, $timeout, urlBase) {
   
   $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
@@ -651,7 +654,30 @@ App.controller('ClientsController', ["$scope", "Bike", "ngTableParams", function
         Bike.findUsersByManufacturer({filter:opt}, $defer.resolve)
       })
     }
-  })   
+  });
+  
+  $scope.generate = function () {
+    $http.get(urlBase+'/bikes/exportUsers?access_token='+LoopBackAuth.accessTokenId, {
+      responseType: 'arraybuffer'
+    })
+      .success(function (data, status, headers, config) {
+        var blob = new Blob([data], {
+          type: 'text/csv;charset=GBK;'
+        });
+        var downloadContainer = angular.element('<div data-tap-disabled="true"><a></a></div>');
+        var downloadLink = angular.element(downloadContainer.children()[0]);
+        downloadLink.attr('href', window.URL.createObjectURL(blob));
+        downloadLink.attr('download', $scope.user.email+Date.now()+'.csv');
+        downloadLink.attr('target', '_blank');
+
+        $document.find('body').append(downloadContainer);
+        $timeout(function () {
+          downloadLink[0].click();
+          downloadLink.remove();
+        }, null);
+      });
+  }
+  
 }])
 /**=========================================================
  * Module: cruises-ctrl.js
