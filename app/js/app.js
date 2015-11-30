@@ -1180,11 +1180,6 @@ App.controller('MessagesController', ["$scope", "$rootScope", "$state", "Message
     $state.go('app.message-compose');
   }
   
-  $scope.delete = function (msg) {
-    Message.deleteById({id: msg.id}, function () {
-      $scope.tableParams.reload();
-    });
-  }
 }])
 
 App.controller('MessageComposeController', ["$scope", "$state", "Message", "ngTableParams", "toaster", function ($scope, $state, Message, ngTableParams, toaster) {
@@ -1195,7 +1190,6 @@ App.controller('MessageComposeController', ["$scope", "$state", "Message", "ngTa
       ToUserName: $scope.messageDraft.touser.id,
       Content: $scope.content
     }, function (result) {
-      console.log($scope.messageDraft);
       toaster.pop('success', '发送成功', '已经向'+$scope.messageDraft.touser.name+"发送了消息！");
       setTimeout(function () {
         $state.go('app.messages');
@@ -1220,13 +1214,18 @@ App.controller('MessageComposeController', ["$scope", "$state", "Message", "ngTa
       };
       Message.find({filter:opt}, function (results) {
         results.forEach(function (msg) {
-          console.log($scope.user, msg);
           msg.avatar = msg.FromUserName == $scope.user.id ? $scope.user.picture: $scope.messageDraft.touser.avatar;
         });
         $defer.resolve(results);
       });
     }
   });
+  
+  $scope.delete = function (msg) {
+    Message.deleteById({id: msg.id}, function () {
+      $scope.tableParams.reload();
+    });
+  }
 }])
 /**=========================================================
  * Module: sidebar-menu.js
