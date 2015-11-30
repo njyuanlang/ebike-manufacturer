@@ -1179,6 +1179,12 @@ App.controller('MessagesController', ["$scope", "$rootScope", "$state", "Message
     }
     $state.go('app.message-compose');
   }
+  
+  $scope.delete = function (msg) {
+    Message.deleteById({id: msg.id}, function () {
+      $scope.tableParams.reload();
+    });
+  }
 }])
 
 App.controller('MessageComposeController', ["$scope", "$state", "Message", "ngTableParams", "toaster", function ($scope, $state, Message, ngTableParams, toaster) {
