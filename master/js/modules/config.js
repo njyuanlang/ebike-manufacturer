@@ -32,6 +32,18 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         templateUrl: helper.basepath('dashboard.html'),
         resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
+    .state('app.mass', {
+        url: '/mass',
+        title: 'Mass',
+        controller: 'MassController',
+        templateUrl: helper.basepath('mass.html')
+    })
+    .state('app.mass-compose', {
+        url: '/mass/compose?touser',
+        title: 'Mass Compose',
+        controller: 'MassComposeController',
+        templateUrl: helper.basepath('mass-compose.html')
+    })
     .state('app.messages', {
         url: '/messages',
         title: 'Messages',

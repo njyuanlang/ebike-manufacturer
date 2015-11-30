@@ -1,0 +1,18 @@
+h3 
+  | 群发功能
+  a.btn.btn-sm.btn-info.pull-right(ui-sref="app.mass-compose()") 新建群发消息
+
+.container-fluid()
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr.text-center(ng-repeat='mass in $data')
+            td.text-left(data-title="'内容'") {{mass.Content}}
+            td(data-title="'时间'") {{mass.CreateTime | moment_unix }}
+            td(data-title="'接收范围'") {{mass.where | mass_filter}}
+            td(data-title="'状态'")
+              a.btn.btn-clear(ng-click="delete(mass)")
+                i.fa.fa-lg.fa-trash.mr-sm
+                | 删除
+  

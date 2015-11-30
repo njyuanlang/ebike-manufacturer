@@ -113,6 +113,18 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         templateUrl: helper.basepath('dashboard.html'),
         resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
+    .state('app.mass', {
+        url: '/mass',
+        title: 'Mass',
+        controller: 'MassController',
+        templateUrl: helper.basepath('mass.html')
+    })
+    .state('app.mass-compose', {
+        url: '/mass/compose?touser',
+        title: 'Mass Compose',
+        controller: 'MassComposeController',
+        templateUrl: helper.basepath('mass-compose.html')
+    })
     .state('app.messages', {
         url: '/messages',
         title: 'Messages',
@@ -1042,6 +1054,89 @@ App.controller('ManufacturersAddController', ["$scope", "$state", "Manufacturer"
     }
   };
   
+}])
+/**=========================================================
+ * Module: mass-ctrl.js
+ * Mass Controller
+ =========================================================*/
+
+App.controller('MassController', ["$scope", "$rootScope", "$state", "Mass", "ngTableParams", function ($scope, $rootScope, $state, Mass, ngTableParams) {
+  
+  $scope.filter = {text: ''}
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+    filter: $scope.filter.text
+  }, {
+    getData: function($defer, params) {
+      var opt = {include: ['FromUser']}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      opt.where = {}
+      if($scope.filter.text != '') {
+        opt.where.Content = {regex: $scope.filter.text}
+      }
+      Mass.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+        Mass.find({filter:opt}, function (results) {
+          $defer.resolve(results);
+        })
+      })
+    }
+  });
+  
+  $scope.delete = function (mass) {
+    Mass.deleteById({id:mass.id}, function () {
+      $scope.tableParams.reload();
+    });
+  }
+}])
+
+App.controller('MassComposeController', ["$scope", "$state", "Mass", "toaster", function ($scope, $state, Mass, toaster) {
+  
+  AMap.service('AMap.DistrictSearch', function () {
+    var districtSearch = new AMap.DistrictSearch({
+      level : 'country',
+      subdistrict : 2    
+    });
+    
+    districtSearch.search('中国', function (status, result) {
+      $scope.provinces = result.districtList[0].districtList;
+      $scope.$apply();
+    });
+  });
+  $scope.region = {
+    province: "",
+    city: ""
+  }
+  $scope.submitForm = function () {
+    var massBody = {
+      where: {},
+      Content: $scope.content
+    };
+    if($scope.region){
+      if($scope.region.province && $scope.region.province !== "") {
+        massBody.where.region = {
+          province: $scope.region.province.name
+        };
+      }
+      if($scope.region.city && $scope.region.city !== "") {
+        var city = $scope.region.city.name;
+        if(city.match(/市辖区$/m)){
+          massBody.where.region.city = city.substr(0, city.length-3);          
+        } else {
+          massBody.where.region.city = city;
+        }
+      } 
+    }
+    Mass.create(massBody, function (result) {
+      toaster.pop('success', '提交成功', "已经向服务器提交了发送请求！");
+      setTimeout(function () {
+        $state.go('app.mass');
+      }, 2000);
+    }, function (reaseon) {
+      toaster.pop('error', '发送错误', res.data.error.mass);
+    })
+  }
 }])
 /**=========================================================
  * Module: messages-ctrl.js
@@ -2222,6 +2317,23 @@ App.filter("loginError", function () {
     return dictionary[state]
   }
 })
+
+/**=========================================================
+ * Module: Mass filters.js
+ * Mass filter
+ =========================================================*/
+
+App.filter("mass_filter", ["$filter", function ($filter) {
+  return function (input) {
+    if(input && input.region){ 
+      var desc = input.region.province;
+      desc += input.region.city||'';
+      return desc+"用户";
+    };
+    return "全部用户";
+  }
+}]);
+
 
 /**=========================================================
  * Module: test-filter.js
