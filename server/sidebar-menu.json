@@ -50,6 +50,10 @@
     "sref": "#",
     "icon": "icon-bar-chart",
     "submenu": [
+      { "text": "Brand", 
+        "sref": "app.statistic-brand", 
+        "translate": "sidebar.nav.statistic.BRAND" 
+      },
       { "text": "Region", 
         "sref": "app.statistic-region", 
         "translate": "sidebar.nav.statistic.REGION" 
